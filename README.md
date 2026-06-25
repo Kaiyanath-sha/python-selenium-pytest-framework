@@ -104,4 +104,4 @@ Every push triggers the GitHub Actions workflow (`.github/workflows/ci.yml`), wh
 - Dockerized test execution
 
 ---
-*Built as a personal project to demonstrate test automation framework design for QA Automation Engineer / SDET roles.*
+
