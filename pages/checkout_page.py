@@ -1,0 +1,39 @@
+"""
+Page Object for the multi-step checkout flow.
+"""
+from selenium.webdriver.common.by import By
+from pages.base_page import BasePage
+
+
+class CheckoutPage(BasePage):
+    CHECKOUT_BUTTON = (By.ID, "checkout")
+    FIRST_NAME_INPUT = (By.ID, "first-name")
+    LAST_NAME_INPUT = (By.ID, "last-name")
+    POSTAL_CODE_INPUT = (By.ID, "postal-code")
+    CONTINUE_BUTTON = (By.ID, "continue")
+    FINISH_BUTTON = (By.ID, "finish")
+    COMPLETE_HEADER = (By.CLASS_NAME, "complete-header")
+    CHECKOUT_ERROR = (By.CSS_SELECTOR, "[data-test='error']")
+    SUMMARY_TOTAL_LABEL = (By.CLASS_NAME, "summary_info")
+
+    def start_checkout(self):
+        self.click(self.CHECKOUT_BUTTON)
+
+    def fill_checkout_info(self, first_name: str, last_name: str, postal_code: str):
+        self.type_text(self.FIRST_NAME_INPUT, first_name)
+        self.type_text(self.LAST_NAME_INPUT, last_name)
+        self.type_text(self.POSTAL_CODE_INPUT, postal_code)
+        self.click(self.CONTINUE_BUTTON)
+        self.logger.info(f"URL after clicking Continue: {self.current_url()}")
+
+    def finish_order(self):
+        self.click(self.FINISH_BUTTON)
+
+    def get_confirmation_message(self) -> str:
+        return self.get_text(self.COMPLETE_HEADER)
+
+    def is_checkout_error_displayed(self) -> bool:
+        return self.is_visible(self.CHECKOUT_ERROR, timeout=6)
+
+    def get_checkout_error(self) -> str:
+        return self.get_text(self.CHECKOUT_ERROR)
